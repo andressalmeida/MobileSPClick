@@ -9,6 +9,7 @@ type CategoriesListProps = {
 
 const Container = styled.ScrollView`
   padding-top: 5px;
+  margin-left: 15px
 `;
 
 const Bar = styled.View`

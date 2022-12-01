@@ -5,12 +5,14 @@ import { TripScreen } from "./src/screens/TripScreen";
 import { FavoritesScreen } from "./src/screens/FavoritesScreen";
 import { ProfileScreen } from "./src/screens/ProfileScreen";
 import { Colors } from "./src/Values/Colors";
-import { Place } from "./src/components/Place";
+import { PlaceProvider } from "./src/Providers/PlaceProvider";
+
 
 const Tab = createMaterialBottomTabNavigator();
 
 export default function App() {
   return (
+<PlaceProvider>
     <NavigationContainer>
       <Tab.Navigator
       initialRouteName='Home'
@@ -58,7 +60,7 @@ export default function App() {
         />
       </Tab.Navigator>
 
-      <Place />
     </NavigationContainer>
+    </PlaceProvider>
   );
 }

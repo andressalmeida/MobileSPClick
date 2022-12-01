@@ -6,7 +6,6 @@ const Container = styled.TouchableOpacity<{
 }>`
   background-color: ${(props) => props.active ? '#002ff7' : 'transparent'};
   height: 40px;
-  margin-right: 15px;
   margin-bottom: 15px;
   padding: 0 15px;
   border-radius: 15px;

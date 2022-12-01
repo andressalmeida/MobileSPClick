@@ -2,6 +2,7 @@ import styled from "@emotion/native";
 import ArrowLeftIcon from "../icons/ArrowLeftIcon";
 import FavoriteOutlineIcon from "../icons/FavoriteOutlineIcon";
 import ShareIcon from "../icons/ShareIcon";
+import { usePlace } from "../Providers/PlaceProvider";
 import { Colors } from "../Values/Colors";
 
 const Container = styled.View`
@@ -19,11 +20,19 @@ const PlaceTitle = styled.Text`
   color: ${Colors.themeContrast};
 `;
 
+
 export const HeaderBar = () => {
+
+  const { hidePlace } = usePlace()
+  
   return (
     <Container>
       <Button>
-        <ArrowLeftIcon />
+        <ArrowLeftIcon 
+          onPress={() => {
+            hidePlace();
+          }}
+        />
       </Button>
       <PlaceTitle>Zoológico de São Paulo</PlaceTitle>
       <Button>

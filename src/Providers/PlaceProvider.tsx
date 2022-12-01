@@ -1,25 +1,29 @@
 import styled from "@emotion/native";
-import { useState } from "react";
+import { ReactNode, useContext, useEffect, useState } from "react";
 import { Dimensions } from "react-native";
+import { PlaceType } from "../@types/PlaceTypes";
+import { Button } from "../components/Button";
+import { HeaderBar } from "../components/HeaderBar";
+import { PlaceContext } from "../Contexts/PlaceContext";
 import { StarIcon } from "../icons/StarIcon";
 import { Colors } from "../Values/Colors";
-import { Button } from "./Button";
-import { HeaderBar } from "./HeaderBar";
+import {PlacesData } from "../data"
+
 
 const { width, height } = Dimensions.get("window"); //Recurso do react para obter dimensões da janela do dispositivo
 
 const Container = styled.View`
   position: absolute;
-  width: ${String(width)}px;
-  height: ${String(height)}px;
+  
 `;
+
 const PlaceContainer = styled.View`
   width: ${String(width)}px;
-  height: ${String(height)}px;
+  height: ${String(height + 20)}px;
   background-color: ${Colors.theme};
   align-items: center;
   justify-content: center;
-  padding: 30px 20px 0 20px;
+  padding: 10px 20px 0 20px;
   position: relative;
 `;
 
@@ -74,14 +78,43 @@ const AddButton = styled(Button)`
   width: ${String(width - 40)}px;
 `;
 
-export const Place = () => {
+type PlaceProviderProps = {
+    children: ReactNode,
+}
+
+export const PlaceProvider = ({ children }: PlaceProviderProps) => {
 
   const [visible, setVisible] = useState(false);
+  const [place, setPlace] = useState<PlaceType | null>(null);
+
+
+  useEffect(() => {
+    const masp = PlacesData.find((item) => item.id === 2);
+    
+    if(masp) {
+        setPlace(masp)
+    }
+  }, [])
+
+
+  const showPlace = () => {
+    setVisible(true);
+  }
+
+  const hidePlace = () => {
+    setVisible(false);
+  }
 
   return (
+    <PlaceContext.Provider value={{
+        showPlace,
+        hidePlace
+    }}>
+     {children}  
+
     <Container
       style={{
-        left: visible ? 0 : width
+        left: visible ? 0 : width //Se o visible for igual a true o componente place será exibida, senão sumirá da tela
       }}
     >
       <PlaceContainer>
@@ -89,29 +122,35 @@ export const Place = () => {
 
         <CoverImage
           source={{
-            uri: "https://ppcult-2022.web.app/images/sp/zoo.jpg",
+            uri: place?.photo,
           }}
         />
 
-        <PlaceTitle>Zoologico de São Paulo</PlaceTitle>
-        <PlaceText>Av....</PlaceText>
+        <PlaceTitle>{place?.title}</PlaceTitle>
+        <PlaceText>{place?.address}</PlaceText>
 
         <Rating>
           <StarIcon />
-          <RatingValue>5.0</RatingValue>
+          <RatingValue>{place?.rating.toPrecision(2)}</RatingValue>
         </Rating>
 
         <Title>Descrição</Title>
         <Description>
-          Lorem ipsum dolor sit amet consectetur, adipisicing elit. Asperiores
-          incidunt pariatur veniam sunt architecto. Doloribus, consequatur
-          perspiciatis dignissimos cumque ducimus similique consequuntur
-          voluptatibus, veritatis aliquid quis, laborum officia asperiores
-          impedit?
+          {place?.description}
         </Description>
 
         <AddButton>Adicionar à minha viagem</AddButton>
       </PlaceContainer>
     </Container>
+    </PlaceContext.Provider>
   );
 };
+
+export const usePlace = () => {
+
+    const context = useContext(PlaceContext);
+
+    return context;
+}
+
+
