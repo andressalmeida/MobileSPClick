@@ -4,12 +4,12 @@ import { StarIcon } from "../icons/StarIcon";
 import FavoriteOutlineIcon from "../icons/FavoriteOutlineIcon";
 import { PlaceType } from "../@types/PlaceTypes";
 import { useEffect, useState } from "react";
-import { usePlace } from "../Providers/PlaceProvider";
+import { usePlace } from "../Contexts/PlaceContext";
 
 const PlaceContainer = styled.TouchableOpacity`
   height: 200px;
   width: 100%;
-  margin-top: 15px;
+  margin-top: 10px;
   position: relative;
 `;
 
@@ -27,6 +27,7 @@ const PlaceTitle = styled.Text`
 
 const PlaceSubTitle = styled.Text`
   color: #fff;
+  margin-right: 40px
 `;
 
 const ImageOverlay = styled(LinearGradient)`
@@ -75,16 +76,18 @@ export const PlaceItem = ({ data }: PlaceItemProps) => {
   const { showPlace } = usePlace()
 
 
-
   useEffect(() => {
     setItem(data)
   }, [data]) //Atualiza a variavel item sempre que o parametro data for alterado
 
 
+
+
+
   return (
     <PlaceContainer
       onPress={() => {
-        showPlace();
+        showPlace(item.id);
       }}
     >
       <PlaceImage
@@ -111,7 +114,6 @@ export const PlaceItem = ({ data }: PlaceItemProps) => {
 
         <Buttons>
           <Button
-          onPress={() => console.log('Favoritar')}
           >
             <FavoriteOutlineIcon /> 
           </Button>

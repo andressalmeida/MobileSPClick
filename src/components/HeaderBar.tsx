@@ -2,14 +2,20 @@ import styled from "@emotion/native";
 import ArrowLeftIcon from "../icons/ArrowLeftIcon";
 import FavoriteOutlineIcon from "../icons/FavoriteOutlineIcon";
 import ShareIcon from "../icons/ShareIcon";
-import { usePlace } from "../Providers/PlaceProvider";
+import { usePlace } from "../Contexts/PlaceContext";
 import { Colors } from "../Values/Colors";
+import FavoriteFilledIcon from "../icons/FavoriteFilledIcon";
+import { useState } from "react";
+
+type HeaderBarProps = {
+  title: string,
+}
 
 const Container = styled.View`
   flex-direction: row;
   padding: 0 20px;
   width: 100%;
-  margin-top: 40px;
+  margin-top: 20px;
   justify-content: space-between;
   align-items: center;
 `;
@@ -21,9 +27,10 @@ const PlaceTitle = styled.Text`
 `;
 
 
-export const HeaderBar = () => {
+export const HeaderBar = ({ title }:HeaderBarProps ) => {
 
   const { hidePlace } = usePlace()
+  const [isPressed, setIsPressed] = useState(false)
   
   return (
     <Container>
@@ -34,13 +41,15 @@ export const HeaderBar = () => {
           }}
         />
       </Button>
-      <PlaceTitle>Zoológico de São Paulo</PlaceTitle>
+      <PlaceTitle>{title ?? ''}</PlaceTitle>
       <Button>
         <ShareIcon />
       </Button>
 
-      <Button>
-        <FavoriteOutlineIcon color={Colors.themeContrast} />
+      <Button onPress={() => {
+        setIsPressed(!isPressed)
+      }}>
+        <FavoriteFilledIcon color={Colors.themeContrast} fill={isPressed ? 'red' : 'transparent'} stroke={isPressed ? 'none' : '#ffff'}/>
       </Button>
     </Container>
   );

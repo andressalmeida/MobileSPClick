@@ -7,4 +7,5 @@ export type PlaceType = {
       categories: number[];
       address: string;
       description: string;
+      isFavorite: boolean,
     };
